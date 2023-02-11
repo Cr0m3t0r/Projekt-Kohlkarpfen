@@ -9,7 +9,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ToDo-Manager';
+  title = 'Project-Kohlkarpfen';
 
   constructor(private modalService: NgbModal, public todoService: TodoService) {
   }
