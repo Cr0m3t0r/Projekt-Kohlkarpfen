@@ -1,0 +1,33 @@
+<div class="container">
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Title</th>
+      <th scope="col">Date</th>
+      <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of todoService.todoList">
+      <ng-container *ngIf="item.done === done">
+        <td>{{item.id}}</td>
+        <td>{{item.title}}</td>
+        <td>{{item.date | date : "dd.MM.yyyy HH:mm"}}</td>
+        <td class="text-right">
+          <button *ngIf="!item.done" type="button" class="btn btn-primary" (click)="todoService.markDone(item.id)">
+            Done
+          </button>
+          <button *ngIf="item.done" type="button" class="btn btn-primary" (click)="todoService.markUndone(item.id)">
+            Undone
+          </button>
+          <button *ngIf="item.done" type="button" class="ms-1 btn btn-danger" (click)="todoService.deleteTodo(item.id)">
+            Delete
+          </button>
+        </td>
+      </ng-container>
+    </tr>
+    </tbody>
+  </table>
+</div>
