@@ -14,7 +14,7 @@ async function bootstrap() {
   console.log('-------------------------------------------------------------');
   console.log('                    ToDo-Backend läuft                       ');
   console.log('-------------------------------------------------------------');
-  console.log('       Liste abrufen:     http://localhost:8080/todolist     ');
+  console.log('       Liste abrufen:     http://localhost:8080/adminlist    ');
   console.log('       Frontend aufrufen: http://localhost:4200              ');
   console.log('-------------------------------------------------------------');
 }

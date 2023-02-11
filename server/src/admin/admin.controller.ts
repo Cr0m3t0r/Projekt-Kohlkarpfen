@@ -5,9 +5,8 @@ import {
     Get,
     NotFoundException,
     OnApplicationBootstrap,
-    Param,
-    ParseIntPipe,
     Post,
+    Query,
 } from '@nestjs/common';
 import { MessageResultDto } from './dto/MessageResultDto';
 import { EntityManager, Repository } from 'typeorm';
@@ -25,12 +24,20 @@ export class AdminController implements OnApplicationBootstrap {
     }
 
     async onApplicationBootstrap(): Promise<void> {
-
+        const adminCount = await this.adminRepository.count();
+        if (adminCount == 0) {
+            const demoAdmins: Admin[] = [
+                Admin.create('David','Password','Dummy'),
+                Admin.create('Lukas', '123456', 'Tester'),
+                Admin.create('Steven', 'Steven', 'Canonfooder'),
+            ];
+            await this.adminRepository.save(demoAdmins);
+        }
     }
 
     @Delete('admin/:id')
     async deleteEntry(
-        @Param('id', ParseIntPipe) id: string,): Promise<MessageResultDto> {
+        @Query('id') id: string,): Promise<MessageResultDto> {
         const adminUser: Admin | null =
             await this.adminRepository.findOneBy({
                 id: id,
@@ -58,7 +65,7 @@ export class AdminController implements OnApplicationBootstrap {
             },
         );
         return new GetAdminDto(
-            adminDto.length + ' ToDos wurden gefunden',
+            adminDto.length + ' Admins wurden gefunden',
             adminDto,
         );
     }
