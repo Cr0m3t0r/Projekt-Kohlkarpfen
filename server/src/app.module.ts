@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TodolistController } from './todolist/todolist.controller';
+import { AdminController } from './admin/admin.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TodoListEntry } from './todolist/model/TodoListEntry';
+import { Admin } from './admin/model/Admin';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: './db/todolist.sqlite',
-      entities: [TodoListEntry],
+      entities: [Admin],
       synchronize: true,
     }),
   ],
-  controllers: [AppController, TodolistController],
+  controllers: [AppController, AdminController],
   providers: [AppService],
 })
 export class AppModule {}
