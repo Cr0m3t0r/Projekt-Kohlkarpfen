@@ -7,7 +7,7 @@ import { ListComponent } from './list/list.component';
 import { AddTodoComponent } from './add-todo/add-todo.component';
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {RouterModule, RouterOutlet, Routes} from "@angular/router";
+import {RouterModule, Routes} from "@angular/router";
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 
