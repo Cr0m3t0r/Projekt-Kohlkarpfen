@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Home Page</title>
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- AngularJS library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+</head>
+
+
+<body>
+<div class="container-fluid">
+  <div class="jumbotron text-center">
+    <h1>Welcome to the Home Page</h1>
+    <p>Here we show all of the things you can sell</p>
+  </div>
+</div>
+
+<div>
+  <tr *ngFor="let item of product;">
+    <td>
+      <!--<a href="{{ item.link }}">{{ item.title }}</a> -->
+    </td>
+  </tr>
+
+</div>
+
+
+</body>
+</html>
