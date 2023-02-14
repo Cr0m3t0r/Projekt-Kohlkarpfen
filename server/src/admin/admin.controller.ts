@@ -5,7 +5,7 @@ import {
     Get,
     NotFoundException,
     OnApplicationBootstrap,
-    Post,
+    Post, Put,
     Query,
 } from '@nestjs/common';
 import { MessageResultDto } from './dto/MessageResultDto';
@@ -80,6 +80,19 @@ export class AdminController implements OnApplicationBootstrap {
         return new MessageResultDto(
             `${newAdmin.username} erfolgreich hinzugefügt`,
         );
+    }
+
+    @Put('admin/role')
+    async updateTraderCellPhoneNumber(
+        @Body() updateData: {role:string, id:string}
+    ): Promise<MessageResultDto> {
+        const admin = await this.adminRepository.findOneBy({ id: updateData.id });
+        if (!admin) {
+            throw new NotFoundException();
+        }
+        admin.role = updateData.role;
+        await this.adminRepository.save(admin);
+        return new MessageResultDto('Trader cell phone number updated successfully');
     }
 
 }
