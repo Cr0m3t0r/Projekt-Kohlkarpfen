@@ -17,7 +17,7 @@ import { TraderDto } from './dto/TraderDto';
 import { PostTraderDto } from './dto/PostTraderDto';
 
 
-@Controller()
+@Controller('trader')
 export class TraderController implements OnApplicationBootstrap {
     private readonly traderRepository: Repository<Trader>;
 
@@ -36,7 +36,7 @@ export class TraderController implements OnApplicationBootstrap {
         }
     }
 
-    @Delete('trader/:id')
+    @Delete('/:id')
     async deleteEntry(
         @Query('id') id: string): Promise<MessageResultDto> {
         const trader: Trader | null = await this.traderRepository.findOneById(
@@ -48,7 +48,7 @@ export class TraderController implements OnApplicationBootstrap {
         return new MessageResultDto(`${trader.fullname} was deleted.`);
     }
 
-    @Get('traderlist')
+    @Get('/list')
     async getAll(): Promise<GetTraderDto> {
         const databaseEntries: Trader[] = await this.traderRepository.find();
         const traderDto: TraderDto[] = databaseEntries.map((trader: Trader) => {
@@ -57,13 +57,13 @@ export class TraderController implements OnApplicationBootstrap {
         return new GetTraderDto(`${traderDto.length} traders found.`, traderDto);
     }
 
-    @Post('trader')
+    @Post('/create')
     async postEntry(@Body() body: PostTraderDto): Promise<MessageResultDto> {
         const newTrader = Trader.create(body.fullname, body.password, body.tradernumber, body.cellphonenumber);
         await this.traderRepository.save(newTrader);
         return new MessageResultDto(`${newTrader.fullname} was added successfully.`);
     }
-    @Put('trader/cellphonenumber')
+    @Put('/cellphonenumber')
     async updateTraderCellPhoneNumber(
         @Body() updateData: {cellphonenumber:number, id:string}
     ): Promise<MessageResultDto> {
@@ -76,7 +76,7 @@ export class TraderController implements OnApplicationBootstrap {
         return new MessageResultDto('Trader cell phone number updated successfully');
     }
 
-    @Put('trader/:id/password')
+    @Put('password/:id')
     async updateTraderPassword(
         @Body() updateData: {password: string, id: string}
     ): Promise<MessageResultDto> {
