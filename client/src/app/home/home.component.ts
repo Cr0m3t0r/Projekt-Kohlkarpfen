@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {Product} from "../Product";
+import {Product} from "../data/Product";
 
 @Component({
   selector: 'app-home',
