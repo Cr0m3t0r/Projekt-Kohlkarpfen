@@ -76,7 +76,7 @@ export class TraderController implements OnApplicationBootstrap {
         return new MessageResultDto('Trader cell phone number updated successfully');
     }
 
-    @Put('password/:id')
+    @Put('/password')
     async updateTraderPassword(
         @Body() updateData: {password: string, id: string}
     ): Promise<MessageResultDto> {

@@ -3,6 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './model/User';
 import {PostUserDto} from "./dto/PostUserDto";
+import {MessageResultDto} from "../admin/dto/MessageResultDto";
+import {GetUserDto} from "./dto/GetUserDto";
+import {UserDto} from "./dto/UserDto";
 
 @Injectable()
 export class UserService {
@@ -11,18 +14,49 @@ export class UserService {
         private readonly userRepository: Repository<User>,
     ) {}
 
-    async create(userData: Partial<User>): Promise<User> {
+    async create(userData: User): Promise<User> {
         const newUser = this.userRepository.create(userData);
         return await this.userRepository.save(newUser);
     }
 
-    async findOneByEmail(email: string): Promise<User | null> {
-        return await this.userRepository.findOneBy({ email });
+    async findOneByEmail(email: string): Promise<User> {
+        const user = await this.userRepository.findOneBy({ email });
+        if (!user) {
+            throw new NotFoundException(`User with email ${email} not found`);
+        }
+        return user
     }
 
-    async findOneById(id: string): Promise<User | null> {
-        return await this.userRepository.findOneBy({ id });
+    async findOneById(id: string): Promise<User> {
+        const user = await this.userRepository.findOneBy({ id });
+        if (!user) {
+            throw new NotFoundException(`User with id ${id} not found`);
+        }
+        return user
     }
+
+    async getAll():Promise<GetUserDto> {
+        const databaseEntries: User[] =
+            await this.userRepository.find();
+        const userDto: UserDto[] = databaseEntries.map(
+            (user: User) => {
+                return new UserDto(
+                    user.id,
+                    user.fullname,
+                    user.email,
+                    user.createdAt,
+                    user.cellphonenumber,
+                    user.interestedproducts,
+                    user.favoredtrader
+                )
+            }
+        )
+        return new GetUserDto(
+            userDto.length + 'User wurden gefunden',
+            userDto
+        )
+    }
+
 
     async updateCellphoneNumber(
         id: string,
@@ -45,8 +79,9 @@ export class UserService {
         return await this.userRepository.save(user);
     }
 
-    async remove(id: string): Promise<void> {
+    async remove(id: string): Promise<MessageResultDto> {
         await this.userRepository.delete(id);
+        return new MessageResultDto("User was deleted.")
     }
 
     async registerUser(userDto :PostUserDto): Promise<User> {

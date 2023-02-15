@@ -15,7 +15,7 @@ import {GetAdminDto} from "./dto/GetAdminDto";
 import {AdminDto} from "./dto/AdminDto";
 import {PostAdminDto} from "./dto/PostAdminDto";
 
-@Controller()
+@Controller('admin')
 export class AdminController implements OnApplicationBootstrap {
     private readonly adminRepository: Repository<Admin>;
 
@@ -35,7 +35,7 @@ export class AdminController implements OnApplicationBootstrap {
         }
     }
 
-    @Delete('admin/:id')
+    @Delete('/delete/:id')
     async deleteEntry(
         @Query('id') id: string,): Promise<MessageResultDto> {
         const adminUser: Admin | null =
@@ -50,7 +50,18 @@ export class AdminController implements OnApplicationBootstrap {
         return new MessageResultDto(`${adminUser.username} wurde gelöscht.`);
     }
 
-    @Get('adminlist')
+    @Get('admin')
+    async getAdmin(
+        @Body() data: {id:string}
+    ): Promise<AdminDto>{
+        const admin = await this.adminRepository.findOneBy({ id: data.id });
+        if (!admin) {
+            throw new NotFoundException();
+        }
+        return new AdminDto(admin.id, admin.username, admin.role, admin.createdAt);
+    }
+
+    @Get('/adminlist')
     async getAll(): Promise<GetAdminDto> {
         const databaseEntries: Admin[] =
             await this.adminRepository.find();
@@ -70,7 +81,7 @@ export class AdminController implements OnApplicationBootstrap {
         );
     }
 
-    @Post('admin')
+    @Post('/create')
     async postEntry(
         @Body() body: PostAdminDto,
     ): Promise<MessageResultDto> {
@@ -82,8 +93,8 @@ export class AdminController implements OnApplicationBootstrap {
         );
     }
 
-    @Put('admin/role')
-    async updateTraderCellPhoneNumber(
+    @Put('/role')
+    async updateAdminRole(
         @Body() updateData: {role:string, id:string}
     ): Promise<MessageResultDto> {
         const admin = await this.adminRepository.findOneBy({ id: updateData.id });
