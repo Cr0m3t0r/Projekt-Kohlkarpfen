@@ -1,16 +1,19 @@
-import {IsNumber, IsString, MinLength} from 'class-validator';
+import {IsNotEmpty, IsNumber, IsString, MinLength} from 'class-validator';
 
 export class PostUserDto {
     @IsString()
     @MinLength(1)
+    @IsNotEmpty()
     public fullname: string;
     @IsString()
     @MinLength(6)
+    @IsNotEmpty()
     public password: string;
-    @IsString()
+   @IsString()
     @MinLength(1)
+   @IsNotEmpty()
     public email: string;
     @IsNumber()
-    @MinLength(1)
+    @IsNotEmpty()
     public cellphonenumber:number
 }

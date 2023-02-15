@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Admin {
+
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
@@ -9,13 +10,13 @@ export class Admin {
     public username: string;
 
     @Column()
-    password: string;
+    public password: string;
 
     @Column()
     public role: string;
 
     @Column()
-    public createdAt: Date;
+    createdAt: Date;
 
     public static create(username: string, password: string, role: string): Admin {
         const admin = new Admin();

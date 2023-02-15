@@ -10,9 +10,9 @@ export class UserDto {
 
     public cellphonenumber: number;
 
-    public interestedProducts: string[];
+    public interestedProducts: string;
 
-    public favoredTrader: string[];
+    public favoredTrader: string;
 
     constructor(
         id: string,
@@ -20,8 +20,8 @@ export class UserDto {
         email: string,
         Date: Date,
         cellphonenumber: number,
-        interestedProducts: string[],
-        favoredTrader: string[]
+        interestedProducts: string,
+        favoredTrader: string
     ) {
         this.id = id;
         this.fullname = fullname;

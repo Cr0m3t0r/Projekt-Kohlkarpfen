@@ -18,10 +18,10 @@ export class Product {
     public amount: number;
 
     @Column()
-    public tags: number[];
+    public tags: string;
 
     @Column()
-    public pictures: number[];
+    public pictures: string;
 
     @Column()
     public trader: string;

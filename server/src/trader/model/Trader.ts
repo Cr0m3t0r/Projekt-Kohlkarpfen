@@ -18,7 +18,7 @@ export class Trader {
     public cellphonenumber: number;
 
     @Column()
-    public products: string[];
+    public products: string;
 
     @Column()
     public createdAt: Date;

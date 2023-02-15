@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Post, Put, UsePipes, ValidationPipe} from '@nestjs/common';
 import { User } from './model/User';
 import { UserService } from './user.service';
 import {PostUserDto} from "./dto/PostUserDto";
@@ -12,6 +12,8 @@ export class UserController {
 
     @Post('/register')
     async registerUser(@Body() body: PostUserDto): Promise<User> {
+        console.log(body)
+        console.log(body.fullname)
         const user = await this.userService.registerUser(body);
         return user;
     }
@@ -44,5 +46,17 @@ export class UserController {
     async getUserByEmail(@Body() data:{email:string}):Promise<User>{
         const result = await this.userService.findOneByEmail(data.email)
         return result;
+    }
+
+    @Put('/updateCellphonenumber')
+    async updateCellphoneNumber(@Body() data:{id:string,cellphonenumber:number}):Promise<MessageResultDto>{
+        const result = await this.userService.updateCellphoneNumber(data.id,data.cellphonenumber)
+        return result
+    }
+
+    @Put('updatepassword')
+    async updatePassword(@Body() data:{id:string,password:string}):Promise<MessageResultDto>{
+        const result = await this.userService.updatePassword(data.id, data.password)
+        return result
     }
 }

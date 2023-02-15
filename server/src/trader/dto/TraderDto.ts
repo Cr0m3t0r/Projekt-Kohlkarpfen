@@ -3,7 +3,7 @@ export class TraderDto {
     public fullname: string;
     public tradernumber: number;
     public cellphonenumber: number;
-    public products: string[];
+    public products: string;
     public createdAt: Date;
 
     constructor(
@@ -11,7 +11,7 @@ export class TraderDto {
         fullname: string,
         tradernumber: number,
         cellphonenumber: number,
-        products: string[],
+        products: string,
         createdAt: Date,
     ) {
         this.id = id;

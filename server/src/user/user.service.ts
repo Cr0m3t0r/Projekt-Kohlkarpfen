@@ -61,22 +61,24 @@ export class UserService {
     async updateCellphoneNumber(
         id: string,
         cellphonenumber: number,
-    ): Promise<User> {
+    ): Promise<MessageResultDto> {
         const user = await this.findOneById(id);
         if (!user) {
             throw new NotFoundException(`User with id ${id} not found`);
         }
         user.cellphonenumber = cellphonenumber;
-        return await this.userRepository.save(user);
+        await this.userRepository.save(user);
+        return new MessageResultDto( user.id + " Users cellphonenumber was updated.")
     }
 
-    async updatePassword(id: string, password: string): Promise<User> {
+    async updatePassword(id: string, password: string): Promise<MessageResultDto> {
         const user = await this.findOneById(id);
         if (!user) {
             throw new NotFoundException(`User with id ${id} not found`);
         }
         user.password = password;
-        return await this.userRepository.save(user);
+        await this.userRepository.save(user);
+        return new MessageResultDto(user.id + " Users Password was updated.")
     }
 
     async remove(id: string): Promise<MessageResultDto> {

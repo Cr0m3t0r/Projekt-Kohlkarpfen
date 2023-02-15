@@ -11,17 +11,17 @@ export class User {
     @Column()
     password: string;
 
-    @Column()
+    @Column({unique:true})
     public email: string;
 
     @Column()
     public cellphonenumber: number;
 
-    @Column()
-    public interestedproducts: string[];
+    @Column({nullable: true})
+    public interestedproducts: string;
 
-    @Column()
-    public favoredtrader: string[]
+    @Column({nullable: true})
+    public favoredtrader: string;
 
     @Column()
     public createdAt: Date;
