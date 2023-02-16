@@ -3,90 +3,72 @@ import {
     Controller,
     Delete,
     Get,
-    NotFoundException,
     OnApplicationBootstrap,
     Post,
     Put,
     Query
 } from '@nestjs/common';
-import { EntityManager, Repository } from 'typeorm';
 import { MessageResultDto } from './dto/MessageResultDto';
 import { GetTraderDto } from './dto/GetTraderDto';
 import { Trader } from './model/Trader';
-import { TraderDto } from './dto/TraderDto';
 import { PostTraderDto } from './dto/PostTraderDto';
+import {TraderService} from "./trader.service";
+import {LoginTraderDto} from "./dto/LoginTraderDto";
 
 
 @Controller('trader')
 export class TraderController implements OnApplicationBootstrap {
-    private readonly traderRepository: Repository<Trader>;
-
-    constructor(private entityManager: EntityManager) {
-        this.traderRepository = entityManager.getRepository(Trader);
-    }
+    constructor(private readonly traderService: TraderService) {}
 
     async onApplicationBootstrap(): Promise<void> {
-        const traderCount = await this.traderRepository.count();
-        if (traderCount === 0) {
-            const demoTraders: Trader[] = [
-                Trader.create('John Doe', 'password123', 1234, 1234567890 ),
-                Trader.create('Jane Doe', 'password456', 5678, 1987654321 ),
-        ];
-            await this.traderRepository.save(demoTraders);
-        }
     }
 
-    @Delete('/:id')
+    @Delete('/delete')
     async deleteEntry(
-        @Query('id') id: string): Promise<MessageResultDto> {
-        const trader: Trader | null = await this.traderRepository.findOneById(
-            id);
-        if (!trader) {
-            throw new NotFoundException();
-        }
-        await this.traderRepository.delete({id: trader.id});
-        return new MessageResultDto(`${trader.fullname} was deleted.`);
+        @Body() id: string): Promise<MessageResultDto> {
+        const result = await this.traderService.remove(id)
+        return result;
     }
 
     @Get('/list')
     async getAll(): Promise<GetTraderDto> {
-        const databaseEntries: Trader[] = await this.traderRepository.find();
-        const traderDto: TraderDto[] = databaseEntries.map((trader: Trader) => {
-            return new TraderDto(trader.id, trader.fullname, trader.tradernumber, trader.cellphonenumber, trader.products, trader.createdAt);
-        });
-        return new GetTraderDto(`${traderDto.length} traders found.`, traderDto);
+        const result = await this.traderService.getAll()
+        return result;
     }
 
     @Post('/create')
     async postEntry(@Body() body: PostTraderDto): Promise<MessageResultDto> {
-        const newTrader = Trader.create(body.fullname, body.password, body.tradernumber, body.cellphonenumber);
-        await this.traderRepository.save(newTrader);
-        return new MessageResultDto(`${newTrader.fullname} was added successfully.`);
+        const result = await this.traderService.create(body)
+        return result
     }
     @Put('/cellphonenumber')
     async updateTraderCellPhoneNumber(
-        @Body() updateData: {cellphonenumber:number, id:string}
+        @Body() updateData: {id:string, cellphonenumber:number}
     ): Promise<MessageResultDto> {
-        const trader = await this.traderRepository.findOneBy({ id: updateData.id });
-        if (!trader) {
-            throw new NotFoundException();
-        }
-        trader.cellphonenumber = updateData.cellphonenumber;
-        await this.traderRepository.save(trader);
-        return new MessageResultDto('Trader cell phone number updated successfully');
+        const result = await this.traderService.updateCellphoneNumber(updateData.id, updateData.cellphonenumber)
+        return result
     }
 
     @Put('/password')
     async updateTraderPassword(
-        @Body() updateData: {password: string, id: string}
+        @Body() updateData: { id: string, password: string}
     ): Promise<MessageResultDto> {
-        const trader = await this.traderRepository.findOneBy({ id: updateData.id });
-        if (!trader) {
-            throw new NotFoundException();
-        }
-        trader.password = updateData.password;
-        await this.traderRepository.save(trader);
-        return new MessageResultDto('Trader password updated successfully');
+        const result = await this.traderService.updatePassword(updateData.id, updateData.password)
+        return result;
     }
+
+    @Get('/searchtradernumber')
+    async getTraderByTradernumber(
+        @Body() data: {tradernumber:number}):Promise<Trader>{
+        const result = await this.traderService.findOneByTradernumber(data.tradernumber);
+        return result
+    }
+
+    @Post('/login')
+    async loginUser(@Body() body: LoginTraderDto): Promise<Trader> {
+        const result = await this.traderService.loginTrader(body.email, body.password);
+        return result;
+    }
+
 
 }

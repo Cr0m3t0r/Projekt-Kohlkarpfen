@@ -8,6 +8,7 @@ import {Trader} from "./trader/model/Trader";
 import {Admin} from "./admin/model/Admin";
 import {Product} from "./product/model/Product";
 import {AdminModule} from "./admin/admin.module";
+import {TraderModule} from "./trader/trader.module";
 
 
 @Module({
@@ -19,7 +20,7 @@ import {AdminModule} from "./admin/admin.module";
       entities: [User, Trader, Admin, Product],
       synchronize: true,
     }),
-      UserModule, AdminModule
+      UserModule, AdminModule, TraderModule
   ],
   controllers: [AppController],
   providers: [AppService],

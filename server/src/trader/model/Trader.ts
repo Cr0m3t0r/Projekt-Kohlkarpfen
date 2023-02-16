@@ -12,21 +12,25 @@ export class Trader {
     password: string;
 
     @Column()
+    email: string;
+
+    @Column()
     public tradernumber: number;
 
     @Column()
     public cellphonenumber: number;
 
-    @Column()
+    @Column({nullable: true})
     public products: string;
 
     @Column()
     public createdAt: Date;
 
-    public static create(fullname: string, password: string, tradernumber: number, cellphonenumber: number): Trader {
+    public static create(fullname: string, password: string, email:string, tradernumber: number, cellphonenumber: number): Trader {
         const trader = new Trader();
         trader.fullname = fullname;
         trader.password = password;
+        trader.email = email;
         trader.tradernumber = tradernumber;
         trader.cellphonenumber = cellphonenumber;
         trader.createdAt = new Date();

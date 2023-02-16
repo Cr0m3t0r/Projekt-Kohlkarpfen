@@ -7,6 +7,9 @@ export class PostTraderDto {
     @IsString()
     @MinLength(6)
     public password: string;
+    @IsString()
+    @MinLength(1)
+    public email: string;
     @IsNumber()
     public tradernumber: number;
     @IsNumber()
