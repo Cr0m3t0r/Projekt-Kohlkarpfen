@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsArray, ValidateNested } from 'class-validator';
-import { ProductDto } from './ProductDto';
+import {Product} from "../model/Product";
 
 export class GetProductDto {
     @Expose()
@@ -11,9 +11,9 @@ export class GetProductDto {
     @IsNotEmpty()
     @IsArray()
     @ValidateNested({ each: true })
-    products: ProductDto[];
+    products: Product[];
 
-    constructor(message: string, products: ProductDto[]) {
+    constructor(message: string, products: Product[]) {
         this.message = message;
         this.products = products;
     }

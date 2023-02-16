@@ -13,6 +13,8 @@ import { EntityManager } from 'typeorm';
 import { Product } from './model/Product';
 import { ProductDto } from './dto/ProductDto';
 import { ProductService } from './product.service';
+import {MessageResultDto} from "./dto/MessageResultDto";
+import {GetProductDto} from "./dto/GetProductDto";
 
 @Controller('product')
 export class ProductController implements OnApplicationBootstrap {
@@ -33,41 +35,42 @@ export class ProductController implements OnApplicationBootstrap {
         }
     }
 
-    @Get('productlist')
-    async getAll(): Promise<ProductDto[]> {
-        const products = await this.productService.findAll();
-        return products.map((product) => new ProductDto(product.name, product.price, product.description, product.amount, product.trader));
+    @Get('/productlist')
+    async getAll(): Promise<GetProductDto>{
+        const result = await this.productService.findAll();
+        return result;
     }
 
-    @Get('/:id')
-    async getOne(@Param('id') id: string): Promise<ProductDto> {
-        const product = await this.productService.findOne(id);
-        if (!product) {
-            throw new NotFoundException('Product not found');
-        }
-        return new ProductDto(product.name, product.price, product.description, product.amount, product.trader);
+    @Get('/productByTrader')
+    async getproductByTrader(@Body() data:{id:string}):Promise<GetProductDto>{
+        const result = await this.productService.findProductsByTrader(data.id);
+        return result
     }
 
-    @Post('create')
-    async create(@Body() productDto: ProductDto): Promise<ProductDto> {
-        const product = await this.productService.create(productDto);
-        return new ProductDto(product.name, product.price, product.description, product.amount, product.trader);
+    @Get('/product')
+    async getOne(@Body() data:{id:string} ): Promise<Product> {
+        const product = await this.productService.findOne(data.id);
+        return product;
     }
 
-    @Put('/update/:id')
+    @Post('/create')
+    async create(@Body() productDto: ProductDto): Promise<MessageResultDto> {
+        const result = await this.productService.create(productDto);
+        return result;
+    }
+
+    @Put('/update/?id')
     async update(@Param('id') id: string, @Body() productDto: ProductDto): Promise<ProductDto> {
         const product = await this.productService.update(id, productDto);
         if (!product) {
             throw new NotFoundException('Product not found');
         }
-        return new ProductDto(product.name, product.price, product.description, product.amount, product.trader);
+        return product;
     }
 
-    @Delete('/delete/:id')
-    async delete(@Param('id') id: string): Promise<void> {
-        const result = await this.productService.remove(id);
-        if (result != null) {
-            throw new NotFoundException('Product not found');
-        }
+    @Delete('/delete')
+    async delete(@Body() body:{id: string}): Promise<MessageResultDto> {
+        const result = await this.productService.remove(body.id);
+        return result
     }
 }

@@ -17,10 +17,10 @@ export class Product {
     @Column()
     public amount: number;
 
-    @Column()
+    @Column({nullable: true})
     public tags: string;
 
-    @Column()
+    @Column({nullable: true})
     public pictures: string;
 
     @Column()
@@ -42,6 +42,7 @@ export class Product {
         product.description = description;
         product.amount = amount;
         product.trader = trader;
+        product.createdAt =  new Date();
         return product;
     }
 }

@@ -5,11 +5,6 @@ export class ProductDto {
     @Expose()
     @IsNotEmpty()
     @IsString()
-    id: string;
-
-    @Expose()
-    @IsNotEmpty()
-    @IsString()
     name: string;
 
     @Expose()
@@ -32,11 +27,8 @@ export class ProductDto {
     @IsString()
     trader: string;
 
-    @Expose()
-    @IsNotEmpty()
-    createdAt: Date;
 
-    constructor(name: string, price: number, description: string, amount: number, trader: string) {
+    constructor( name: string, price: number, description: string, amount: number, trader: string) {
         this.name = name;
         this.price = price;
         this.description = description;
